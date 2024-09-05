@@ -1,0 +1,13 @@
+[Unit]
+Description=Self hosted cloud
+After=network.target
+
+[Service]
+ExecStart=/home/ubuntu/virtualenv/bin/python3 /mnt/disque_dur/app.py
+WorkingDirectory=/mnt/disque_dur/
+User=ubuntu
+Group=ubuntu
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

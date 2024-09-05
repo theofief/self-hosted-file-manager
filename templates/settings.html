@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vjs.zencdn.net https://cdn.quilljs.com https://www.paypalobjects.com; 
+    img-src * data:; 
+    connect-src 'self'; 
+    media-src 'self' blob:; 
+    object-src 'none'; 
+    frame-src 'self'; 
+    child-src 'self'; 
+    form-action 'self'; 
+    base-uri 'self'; 
+    manifest-src 'self';
+    ">
+    <title>Settings</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="allowCookies" id="cookiePopup">
+        <div class="cookie-popup">
+            <p>Nous utilisons des cookies pour améliorer votre expérience sur notre site. En continuant à utiliser ce site, vous acceptez notre utilisation des cookies.</p>
+            <button id="acceptCookies">Accepter</button>
+        </div>
+    </div>
+
+    <a href="files.html"><h2>< Back</h2></a><br/>
+
+    <input type="checkbox" id="autoUpdates" name="autoUpdates" />
+    <label for="autoUpdates">Enable auto updates</label><br/><br/>
+
+    <button onClick="comingSoon('Checking updates fonction')">Check Updates</button><br/><br/>
+
+    <input type="checkbox" id="darkMode" name="darkMode" />
+    <label for="darkMode">Enable Dark mode</label><br/><br/>
+
+	 <button id="logoutBtn">Logout</button> 
+
+    <h2>More settings will coming soon...</h2>
+
+    <footer>
+        <h2>
+            <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/TFStudioInc/self-hosted-file-manager">self-hosted-file-manager</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://instagram.com/theo.fief">Théo Fief</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
+        </h2>
+        <a href="ref.html"><h2>Credits</h2></a>
+        <div id="donate-button-container">
+            <div id="donate-button"></div>
+            <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
+            <script>
+            PayPal.Donation.Button({
+            env:'production',
+            hosted_button_id:'HUTUMJV7S5XJE',
+            image: {
+            src:'https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif',
+            alt:'Donate with PayPal button',
+            title:'PayPal - The safer, easier way to pay online!',
+            }
+            }).render('#donate-button');
+            </script>
+            </div>  
+    </footer>
+    <script>
+        function comingSoon(thing) {
+            alert(thing + " will be coming soon!");
+        }
+
+        document.getElementById("autoUpdates").addEventListener("change", function() {
+            if (this.checked) {
+                comingSoon("Auto updates fonction");
+                this.checked = false;
+            }
+        });
+
+        document.getElementById("darkMode").addEventListener("change", function() {
+            if (this.checked) {
+                comingSoon("Dark mode");
+                this.checked = false;
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Vérification du token lors du chargement de la page
+            fetch('/verify-token', {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.valid) {
+                    
+                } else {
+                    window.location.href = '/'; // Redirection vers la page d'accueil si le token n'est pas valide
+                }
+            });
+
+            // Fonction de déconnexion
+            document.getElementById("logoutBtn").addEventListener("click", function() {
+                fetch('/logout', {
+                    method: 'GET'
+                }).then(() => {
+                    window.location.href = '/'; // Redirection vers la page d'accueil après la déconnexion
+                });
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Vérifie si l'utilisateur a déjà accepté les cookies
+            if (!localStorage.getItem('cookiesAccepted')) {
+                document.getElementById('cookiePopup').style.display = 'block';
+            } else {
+                document.getElementById('cookiePopup').style.display = 'none';
+            }
+        
+            // Quand l'utilisateur clique sur "Accepter"
+            document.getElementById('acceptCookies').addEventListener('click', function() {
+                localStorage.setItem('cookiesAccepted', 'true');
+                document.getElementById('cookiePopup').style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
